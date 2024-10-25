@@ -16,7 +16,6 @@ public class DeliveryCompany {
     private String name;
     private String phoneNumber;
 
-    // getters and setters
 }
 
 // mant attributes not included in this code, show why

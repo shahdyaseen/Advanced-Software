@@ -39,6 +39,5 @@ public class Payment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // Getters and Setters
 }
 

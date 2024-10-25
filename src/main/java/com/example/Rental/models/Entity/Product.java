@@ -7,6 +7,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Entity
 @Table(name = "products")
 public class Product {
+// this class should remove, use item class instead of . if you need
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +23,8 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    private Boolean isAvailable = true; // للإشارة إذا كانت السيارة متاحة للاستئجار أم لا
+    private Boolean isAvailable = true;
 
 
-    // getters and setters
 }
 

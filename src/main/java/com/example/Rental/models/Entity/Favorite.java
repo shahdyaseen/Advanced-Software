@@ -25,5 +25,4 @@ public class Favorite {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    // Constructors, getters, setters
 }

@@ -37,5 +37,4 @@ public class Message {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // Constructors, getters, setters
 }

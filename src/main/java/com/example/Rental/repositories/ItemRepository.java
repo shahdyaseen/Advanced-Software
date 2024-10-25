@@ -1,10 +1,11 @@
 package com.example.Rental.repositories;
 
-import com.example.Rental.models.Entity.User;
+import com.example.Rental.models.Entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.List;
 
+@Repository
+public interface ItemRepository extends JpaRepository<Item, Long> {
 }

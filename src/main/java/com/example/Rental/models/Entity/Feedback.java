@@ -16,5 +16,4 @@ public class Feedback {
     private Long userId;
     private String message;
 
-    // getters and setters
 }

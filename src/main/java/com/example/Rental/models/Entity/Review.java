@@ -34,5 +34,4 @@ public class Review {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // Constructors, getters, setters
 }

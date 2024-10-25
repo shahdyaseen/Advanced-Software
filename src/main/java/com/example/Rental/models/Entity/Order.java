@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "`order`")  // Use backticks instead of single quotes
+@Table(name = "`order`")
 public class Order {
-
+// this class should remove, use rental class instead of . if you need
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
@@ -27,5 +27,4 @@ public class Order {
     private Boolean isReturned = false;
 
 
-    // getters and setters
 }

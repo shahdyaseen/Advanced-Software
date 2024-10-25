@@ -17,5 +17,4 @@ public class ItemTag {
     @Column(nullable = false, length = 50)
     private String tag;
 
-    // Constructors, getters, setters
 }

@@ -37,5 +37,4 @@ public class InsurancePolicy {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
-    // Timestamps, constructors, getters, setters
 }

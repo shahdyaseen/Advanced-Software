@@ -1,7 +1,5 @@
 package com.example.Rental.models.Entity;
 
-
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,29 +8,30 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
 @Data
 @Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "categories")
-public class Category {
+@Table(name = "notifications")
+public class Notification {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @ManyToOne
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
+
+    private String message;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
-
+    private Boolean isRead = false;
 }
-

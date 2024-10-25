@@ -30,7 +30,6 @@ public class UserInteraction {
     @CreationTimestamp
     private LocalDateTime timestamp;
 
-    // Constructors, getters, setters
 }
 
 

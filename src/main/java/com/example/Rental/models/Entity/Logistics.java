@@ -37,5 +37,4 @@ public class Logistics {
     @Column(nullable = false)
     private LogisticsStatus status;
 
-    // Timestamps, constructors, getters, setters
 }
