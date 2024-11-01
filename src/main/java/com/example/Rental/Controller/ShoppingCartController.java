@@ -2,8 +2,7 @@ package com.example.Rental.Controller;
 
 import com.example.Rental.DTO.CartItemRequest;
 import com.example.Rental.DTO.CartItemResponse;
-import com.example.Rental.Errors.ItemNotFoundException;
-import com.example.Rental.Errors.OutOfStockException;
+import com.example.Rental.Errors.*;
 import com.example.Rental.Services.UserServices.ShoppingCartService;
 import com.example.Rental.models.Entity.ShoppingCart;
 import org.slf4j.Logger;
@@ -205,5 +204,42 @@ public class ShoppingCartController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
+    @PutMapping("/confirmItemOrder/{itemId}/{userId}")
+    public ResponseEntity<?> confirmCartItem(@PathVariable Long itemId, @PathVariable Long userId) {
+        try {
+            ShoppingCart confirmedItem = shoppingCartService.confirmCartItem(userId, itemId);
+            logger.info("Confirmed cart item: Item ID={}, User ID={}", itemId, userId);
+            return ResponseEntity.ok(confirmedItem);
+        } catch (CartItemNotFoundException e) {
+            logger.error("Cart item not found: Item ID={}, User ID={}", itemId, userId, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart item not found.");
+        } catch (UserNotFoundException e) {
+            logger.error("User not found: User ID={}", userId, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        } catch (UnauthorizedAccessException e) {
+            logger.error("Unauthorized access: Item ID={}, User ID={}", itemId, userId, e);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to confirm this item.");
+        } catch (Exception e) {
+            logger.error("Failed to confirm cart item: Item ID={}, User ID={}", itemId, userId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+        }
+    }
+
+    @PutMapping("/confirmCartOrder/{userId}")
+    public ResponseEntity<?> confirmAllCartItems(@PathVariable Long userId) {
+        try {
+            List<ShoppingCart> confirmedItems = shoppingCartService.confirmAllCartItems(userId);
+            logger.info("Confirmed all cart items for User ID={}", userId);
+            return ResponseEntity.ok(confirmedItems);
+        } catch (UserNotFoundException e) {
+            logger.error("User not found: User ID={}", userId, e);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        } catch (CartEmptyException e) {
+            logger.warn("No items to confirm for User ID={}", userId, e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No items in the cart to confirm.");
+        } catch (Exception e) {
+            logger.error("Failed to confirm all cart items for User ID={}", userId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+        }}
 
 }
