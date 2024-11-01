@@ -62,11 +62,24 @@ public class Item {
     @Column(name = "availability_status", nullable = false)
     private AvailabilityStatus availabilityStatus = AvailabilityStatus.AVAILABLE;
 
-    public Item(Long itemId) {
-        this.id = itemId;
-    }
     public boolean isAvailable() {
         return availability != null && availability;
     }
 
+
+    private double averageRating;
+    @Column(
+            name = "review_count",
+            nullable = false
+    )
+    private int reviewCount;
+
+    public Item(Long itemId) {
+        this.averageRating = 0.0;
+        this.reviewCount = 0;
+        this.id = itemId;
+    }
+
 }
+
+
