@@ -3,9 +3,18 @@ package com.example.Rental.models.Entity;
 import com.example.Rental.models.Enumes.PaymentMethod;
 import com.example.Rental.models.Enumes.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
+@Data
+@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "payments")
 public class Payment {
     @Id
