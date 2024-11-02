@@ -18,10 +18,7 @@ public class CommissionService {
         this.commissionRepository = commissionRepository;
     }
 
-    public Commission calculateAndSaveCommission(Rental rental) {
-        BigDecimal commissionRate = new BigDecimal("0.10"); // 10%
-        BigDecimal commissionAmount = rental.getTotalPrice().multiply(commissionRate);
-
+    public Commission calculateAndSaveCommission(Rental rental, BigDecimal commissionAmount) {
         Commission commission = new Commission();
         commission.setRental(rental);
         commission.setAmount(commissionAmount);
