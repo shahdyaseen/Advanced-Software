@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -37,7 +38,7 @@ public class Rental {
     private LocalDate endDate;
 
     @Column(name = "total_price", nullable = false)
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -48,5 +49,14 @@ public class Rental {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(name = "Note")
+    private String note = String.valueOf(LocalDateTime.now());
+    @Column(name = "initial_payment_amount")
+    private BigDecimal initialPaymentAmount = BigDecimal.ZERO;
+
+    @Column(name = "remaining_payment_amount")
+    private BigDecimal remainingPaymentAmount = BigDecimal.ZERO;
+
+
 
 }

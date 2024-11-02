@@ -57,9 +57,9 @@ public class UserController {
             Optional<User> optionalUser = userRepository.findById(id);
             if (optionalUser.isPresent()) {
                 userRepository.deleteById(id);
-                return ResponseEntity.noContent().build(); // Return 204 No Content
+                return ResponseEntity.noContent().build();
             } else {
-                return ResponseEntity.notFound().build();  // Return 404 if user not found
+                return ResponseEntity.notFound().build();
             }
         }
 

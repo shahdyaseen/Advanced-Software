@@ -1,20 +1,18 @@
 package com.example.Rental.Services.UserServices;
 
 import com.example.Rental.DTO.CartItemResponse;
-import com.example.Rental.Errors.CategoryNotFoundException;
-import com.example.Rental.Errors.ItemNotFoundException;
-import com.example.Rental.Errors.OutOfStockException;
-import com.example.Rental.Errors.UserNotFoundException;
+import com.example.Rental.Errors.*;
 import com.example.Rental.models.Entity.*;
+import com.example.Rental.models.Enumes.RentalStatus;
 import com.example.Rental.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,24 +22,42 @@ public class ShoppingCartService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
+    NotificationServiceImpl notificationService;
+    RentalRepository rentalRepository;
+
 
     @Autowired
     public ShoppingCartService(ShoppingCartRepository shoppingCartRepository,
                                UserRepository userRepository,
                                ItemRepository itemRepository,
-                               CategoryRepository categoryRepository) {
+                               CategoryRepository categoryRepository,
+                               NotificationServiceImpl notificationService,
+                               RentalRepository rentalRepository) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
         this.categoryRepository = categoryRepository;
+        this.notificationService=notificationService;
+        this.rentalRepository= rentalRepository;
     }
 
     public ShoppingCart addItemToCart(Long userId, Long itemId, int quantity, LocalDate startDate, LocalDate endDate) {
         User user = findUserById(userId);
         Item item = findItemById(itemId);
         validateItemAvailability(item, quantity);
-        return createCartItem(user, item, quantity, startDate, endDate);
+
+        ShoppingCart existingCartItem = shoppingCartRepository.findByUserAndItem(user, item);
+
+        if (existingCartItem != null) {
+            int newQuantity = existingCartItem.getQuantity() + quantity;
+            validateItemAvailability(item, newQuantity);
+            existingCartItem.setQuantity(newQuantity);
+            return shoppingCartRepository.save(existingCartItem);
+        } else {
+            return createCartItem(user, item, quantity, startDate, endDate);
+        }
     }
+
 
     public List<CartItemResponse> getCartItems(Long userId) {
         User user = findUserById(userId);
@@ -169,5 +185,49 @@ public class ShoppingCartService {
         return cartItems.stream()
                 .map(item -> item.getPriceAtAddition().multiply(new BigDecimal(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+    public ShoppingCart confirmCartItem(Long userId, Long itemId) {
+        ShoppingCart cartItem = shoppingCartRepository.findByUserAndItem(findUserById(userId),findItemById(itemId));
+
+
+        Rental rental = createRental(cartItem);
+        rentalRepository.save(rental);
+
+        User owner = cartItem.getItem().getUser();
+        String subject = "Rental request for " + cartItem.getItem().getTitle() + " Item";
+        String messageContent = "The item has been requested to be rented by " + cartItem.getUser().getName() + ".";
+        notificationService.sendNotification(owner, subject, messageContent, rental, cartItem.getItem(),cartItem.getUser().getEmail());
+
+        return cartItem;
+    }
+
+
+    public List<ShoppingCart> confirmAllCartItems(Long userId) {
+        User user = findUserById(userId);
+        List<ShoppingCart> cartItems = shoppingCartRepository.findByUser(user);
+
+        cartItems.forEach(cartItem -> {
+            Rental rental = createRental(cartItem);
+            rentalRepository.save(rental);
+            User owner = cartItem.getItem().getUser();
+            notificationService.sendNotification(owner, "Item Rented",
+                    "The item " + cartItem.getItem().getTitle() + " has been rented by " + user.getName(),
+                    rental, cartItem.getItem(),cartItem.getUser().getEmail());
+        });
+
+        return cartItems;
+    }
+
+    private Rental createRental(ShoppingCart cartItem) {
+        Rental rental = new Rental();
+        rental.setItem(cartItem.getItem());
+        rental.setRenter(cartItem.getUser());
+        rental.setStartDate(cartItem.getStartDate());
+        rental.setEndDate(cartItem.getEndDate());
+        rental.setTotalPrice(cartItem.getPriceAtAddition().multiply(new BigDecimal(cartItem.getQuantity())));
+        rental.setStatus(RentalStatus.PENDING);
+        rental.setCreatedAt(LocalDateTime.now());
+        rental.setUpdatedAt(LocalDateTime.now());
+        return rental;
     }
 }

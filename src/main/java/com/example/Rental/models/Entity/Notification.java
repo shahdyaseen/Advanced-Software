@@ -23,6 +23,9 @@ public class Notification {
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
+    @ManyToOne
+    @JoinColumn(name = "rental_id", nullable = false)
+    private Rental rentalId;
 
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
