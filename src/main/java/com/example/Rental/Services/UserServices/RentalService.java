@@ -1,6 +1,10 @@
 package com.example.Rental.Services.UserServices;
 
 import com.example.Rental.Errors.RentalNotFoundException;
+<<<<<<< HEAD
+=======
+import com.example.Rental.Services.CommissionService;
+>>>>>>> haneen
 import com.example.Rental.models.Entity.Rental;
 import com.example.Rental.models.Entity.User;
 import com.example.Rental.models.Enumes.PaymentMethod;
@@ -15,6 +19,7 @@ public class RentalService {
 
     private final RentalRepository rentalRepository;
     private final NotificationServiceImpl notificationService;
+<<<<<<< HEAD
    // private PaymentService paymentService;
 
     @Autowired
@@ -22,6 +27,23 @@ public class RentalService {
         this.rentalRepository = rentalRepository;
         this.notificationService = notificationService;
        // this.paymentService=paymentService;
+=======
+    private PaymentService paymentService;
+
+    /////////////////////////////////////////////////h
+    private final CommissionService commissionService;
+    /////////////////////////////////////////////////h
+    @Autowired
+    public RentalService(RentalRepository rentalRepository, NotificationServiceImpl notificationService,  PaymentService paymentService, CommissionService commissionService) {
+        this.rentalRepository = rentalRepository;
+        this.notificationService = notificationService;
+        this.paymentService=paymentService;
+
+        /////////////////////////////////////////////////h
+        this.commissionService = commissionService;
+        /////////////////////////////////////////////////h
+
+>>>>>>> haneen
     }
 
     public void confirmRental(Long rentalId) {
@@ -45,12 +67,22 @@ public class RentalService {
         rental.setNote(notes);
         rentalRepository.save(rental);
 
+<<<<<<< HEAD
+=======
+        /////////////////////////////////////////////////h
+        // Calculate and save commission upon confirmation
+        commissionService.calculateAndSaveCommission(rental);
+        /////////////////////////////////////////////////h
+
+
+>>>>>>> haneen
         User renter = rental.getRenter();
         String message = "Your rental request for " + rental.getItem().getTitle() + " has been rejected. Reason: " + notes;
         notificationService.sendNotification(renter, "Rental Request Rejected", message,rental,rental.getItem());
     }
 
 
+<<<<<<< HEAD
 //    public void confirmRental(Rental rental, PaymentMethod paymentMethod) {
 //        rental.setStatus(RentalStatus.CONFIRMED);
 //       // paymentService.processInitialPayment(rental, paymentMethod);
@@ -64,3 +96,37 @@ public class RentalService {
 //    }
 
 }
+=======
+    public void confirmRental(Rental rental, PaymentMethod paymentMethod) {
+        rental.setStatus(RentalStatus.CONFIRMED);
+        paymentService.processInitialPayment(rental, paymentMethod);
+        // تحديث حالة الطلب
+        rentalRepository.save(rental);
+
+        /////////////////////////////////////////////////h
+        // Calculate and save commission upon confirmation
+        commissionService.calculateAndSaveCommission(rental);
+        /////////////////////////////////////////////////h
+    }
+
+    public void deliverRental(Rental rental, PaymentMethod paymentMethod) {
+        rental.setStatus(RentalStatus.DELIVERED);
+        paymentService.processFinalPayment(rental, paymentMethod);
+        // تحديث حالة الطلب
+        rentalRepository.save(rental);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+>>>>>>> haneen

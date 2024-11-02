@@ -229,5 +229,10 @@ public class ShoppingCartService {
         rental.setCreatedAt(LocalDateTime.now());
         rental.setUpdatedAt(LocalDateTime.now());
         return rental;
+<<<<<<< HEAD
      }
 }
+=======
+    }
+}
+>>>>>>> haneen
