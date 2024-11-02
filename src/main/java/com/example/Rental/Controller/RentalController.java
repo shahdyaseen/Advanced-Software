@@ -31,7 +31,6 @@ public class RentalController {
         }
     }
 
-    // Endpoint لرفض طلب الإيجار مع توضيح السبب
     @PostMapping("/{rentalId}/reject")
     public ResponseEntity<String> rejectRental(
             @PathVariable Long rentalId,
