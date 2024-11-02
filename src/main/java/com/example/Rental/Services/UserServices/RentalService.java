@@ -31,7 +31,6 @@ public class RentalService {
         rental.setStatus(RentalStatus.CONFIRMED);
         rentalRepository.save(rental);
 
-        // إرسال الإشعار إلى المستأجر
         User renter = rental.getRenter();
         String message = "Your rental request for the item " + rental.getItem().getTitle() + " has been confirmed.";
         notificationService.sendNotification(renter, "Your Rental Request is Confirmed!", message, rental, rental.getItem());

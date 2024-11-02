@@ -46,7 +46,7 @@ public class NotificationServiceImpl {
 
     public void sendNotification(User recipient, String subject, String messageContent, Rental rental, Item item) {
         Notification notification = new Notification();
-        notification.setOwner(recipient); // المستلم هو المستأجر
+        notification.setOwner(recipient);
         notification.setRentalId(rental);
         notification.setItem(item);
         notification.setMessage(subject + ": " + messageContent);

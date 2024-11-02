@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -69,6 +70,8 @@ public class User {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @Column(name = "Balance", nullable = false)
+    private BigDecimal balance = BigDecimal.ZERO;
 
     public User(Long userId) {
         this.userId = userId;
