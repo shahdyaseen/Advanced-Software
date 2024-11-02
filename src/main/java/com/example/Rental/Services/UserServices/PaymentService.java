@@ -10,6 +10,7 @@ import com.example.Rental.models.Enumes.RentalStatus;
 import com.example.Rental.repositories.PaymentRepository;
 import com.example.Rental.repositories.RentalRepository;
 import com.example.Rental.repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,5 +79,6 @@ public class PaymentService {
             paymentRepository.save(payment);
         }
     }
+
 
 }

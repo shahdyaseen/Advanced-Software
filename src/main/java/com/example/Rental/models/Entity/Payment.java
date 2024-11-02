@@ -8,14 +8,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity@Table(name = "payments")
+@Table(name = "payments")
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

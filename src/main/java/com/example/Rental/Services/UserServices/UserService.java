@@ -4,25 +4,21 @@ import com.example.Rental.models.Entity.User;
 import com.example.Rental.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-<<<<<<< Updated upstream
-=======
+
 
 import java.math.BigDecimal;
 import java.util.Optional;
->>>>>>> Stashed changes
+import java.util.Optional;
 
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
 public class UserService {
-    @Autowired
-<<<<<<< Updated upstream
-    private UserRepository userRepository;
-    public User findById(Long userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
 
-}
-=======
     private static UserRepository userRepository;
     @Autowired
     public UserService(UserRepository userRepository){
@@ -61,4 +57,5 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
     }
 }
->>>>>>> Stashed changes
+
+}

@@ -57,4 +57,5 @@ public class Rental {
     @Column(name = "remaining_payment_amount")
     private BigDecimal remainingPaymentAmount = BigDecimal.ZERO;
 
+
 }

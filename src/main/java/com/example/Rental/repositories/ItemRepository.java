@@ -8,4 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
+    List<Item> findByTitleContainingIgnoreCase(String title);
+    boolean existsByCategoryId(Long categoryId);
+    void deleteByCategoryId(Long categoryId);
 }

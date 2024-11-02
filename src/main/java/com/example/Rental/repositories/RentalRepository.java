@@ -13,3 +13,4 @@ public interface RentalRepository extends JpaRepository<Rental,Long>{
         List<Rental> findByRenterAndStatus(User renter, RentalStatus status);
 
         }
+
