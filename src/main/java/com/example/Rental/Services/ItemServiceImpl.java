@@ -2,6 +2,7 @@ package com.example.Rental.Services;
 
 import com.example.Rental.models.Entity.Item;
 import com.example.Rental.repositories.ItemRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository) {
+    public ItemServiceImpl(ItemRepository itemRepository ) {
+
         this.itemRepository = itemRepository;
     }
 
@@ -41,6 +43,7 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public Item updateItem(Long id, Item item) {
         return itemRepository.findById(id).map(existingItem -> {
@@ -85,4 +88,9 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItemsByCategory(Long categoryId) {
         itemRepository.deleteByCategoryId(categoryId);
     }
+
+
+
+
+
 }

@@ -15,4 +15,5 @@ public interface ItemService {
     List<Item> searchItemsByTitle(String title);
     boolean hasItemsForCategory(Long categoryId);
     void deleteItemsByCategory(Long categoryId);
+
 }

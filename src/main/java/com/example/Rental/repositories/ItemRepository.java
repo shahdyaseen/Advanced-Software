@@ -6,9 +6,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import com.example.Rental.models.Entity.Category;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByTitleContainingIgnoreCase(String title);
     boolean existsByCategoryId(Long categoryId);
     void deleteByCategoryId(Long categoryId);
+
+
 }
