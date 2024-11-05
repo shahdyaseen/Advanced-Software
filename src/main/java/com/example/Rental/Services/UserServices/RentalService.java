@@ -2,6 +2,7 @@ package com.example.Rental.Services.UserServices;
 
 import com.example.Rental.Errors.RentalNotFoundException;
 import com.example.Rental.Services.CommissionService;
+import com.example.Rental.Services.RecommendationService;
 import com.example.Rental.models.Entity.Rental;
 import com.example.Rental.models.Entity.User;
 import com.example.Rental.models.Enumes.PaymentMethod;
@@ -19,15 +20,18 @@ public class RentalService {
 
     // private PaymentService paymentService;
     private final CommissionService commissionService;
+    private final RecommendationService recommendationService;
 
 
     @Autowired
-    public RentalService(RentalRepository rentalRepository, NotificationServiceImpl notificationService,CommissionService commissionService/* , PaymentService paymentService*/) {
+    public RentalService(RentalRepository rentalRepository, NotificationServiceImpl notificationService,CommissionService commissionService,RecommendationService recommendationService/* , PaymentService paymentService*/) {
         this.rentalRepository = rentalRepository;
         this.notificationService = notificationService;
-
        // this.paymentService=paymentService;
         this.commissionService = commissionService;
+
+        this.recommendationService = recommendationService;
+
     }
 
     public void confirmRental(Long rentalId) {
@@ -37,6 +41,8 @@ public class RentalService {
         rental.setStatus(RentalStatus.CONFIRMED);
         rentalRepository.save(rental);
 
+        // Log rental attempt in recommendations
+        recommendationService.logUserRentalInteraction(rental.getRenter().getUserId(), rental.getItem().getId());
 
         User renter = rental.getRenter();
         String message = "Your rental request for the item " + rental.getItem().getTitle() + " has been confirmed.";
@@ -50,6 +56,10 @@ public class RentalService {
         rental.setStatus(RentalStatus.REJECTED);
         rental.setNote(notes);
         rentalRepository.save(rental);
+
+        // Log rental interaction in recommendations
+        recommendationService.logUserRentalInteraction(rental.getRenter().getUserId(), rental.getItem().getId());
+
 
         User renter = rental.getRenter();
         String message = "Your rental request for " + rental.getItem().getTitle() + " has been rejected. Reason: " + notes;

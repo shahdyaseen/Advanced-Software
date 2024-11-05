@@ -106,7 +106,7 @@ public class PaymentService {
         }
 
         for (Rental rental : confirmedRentals) {
-            commissionService.calculateAndSaveCommission(rental, rental.getTotalPrice().multiply(new BigDecimal("0.10")));
+            commissionService.calculateAndSaveCommission(rental);
         }
     }
 
