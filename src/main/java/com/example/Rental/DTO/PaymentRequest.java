@@ -13,4 +13,5 @@ public class PaymentRequest {
     private String cardNumber;
     private String expiryDate;
     private String securityCode;
+    private BigDecimal deliveryFee;
 }

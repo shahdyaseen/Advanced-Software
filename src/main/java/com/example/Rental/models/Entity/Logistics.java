@@ -1,6 +1,6 @@
 package com.example.Rental.models.Entity;
 
-import com.example.Rental.models.Enumes.LogisticsStatus;
+import com.example.Rental.models.Enumes.DeliveryStatus;
 import com.example.Rental.models.Enumes.LogisticsType;
 import jakarta.persistence.*;
 
@@ -35,6 +35,6 @@ public class Logistics {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private LogisticsStatus status;
+    private DeliveryStatus status;
 
 }
