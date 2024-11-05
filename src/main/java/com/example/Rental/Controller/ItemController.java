@@ -26,7 +26,7 @@ public class ItemController {
         return itemService.getAllItems();
     }
 
-    //  search functionality
+
     @GetMapping("/search")
     public List<Item> searchItems(@RequestParam String title) {
         return itemService.searchItemsByTitle(title);
