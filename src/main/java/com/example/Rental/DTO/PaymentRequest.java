@@ -13,5 +13,7 @@ public class PaymentRequest {
     private String cardNumber;
     private String expiryDate;
     private String securityCode;
+    private String stripeToken;
+
     private BigDecimal deliveryFee;
 }

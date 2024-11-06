@@ -33,6 +33,7 @@ public class PaymentService {
     private RentalRepository rentalRepository;
     @Autowired
     private PaymentRepository paymentRepository;
+
     @Autowired
     private DeliveryRepository deliveryRepository;
 
@@ -84,6 +85,7 @@ public class PaymentService {
             payment.setRental(rental);
             payment.setAmount(rental.getTotalPrice());
             payment.setPaymentMethod(request.getPaymentMethod());
+
             payment.setDeliveryFee(request.getDeliveryFee().doubleValue());
 
             switch (request.getPaymentMethod()) {
@@ -113,6 +115,7 @@ public class PaymentService {
             User itemOwner = rental.getItem().getUser();
             itemOwner.setBalance(itemOwner.getBalance().add(itemOwnerCommission));
             userRepository.save(itemOwner);
+
 
 
             Delivery delivery = new Delivery();
@@ -148,5 +151,6 @@ public class PaymentService {
             commissionService.calculateAndSaveCommission(rental, rental.getTotalPrice().multiply(new BigDecimal("0.10")));
         }
     }
+
 
 }
