@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,7 +30,6 @@ public class PaymentService {
     private RentalRepository rentalRepository;
     @Autowired
     private PaymentRepository paymentRepository;
-
     @Autowired
     private CreditCardPaymentProcessor creditCardProcessor;
     @Autowired
@@ -39,10 +40,13 @@ public class PaymentService {
     private BankTransferPaymentProcessor bankTransferProcessor;
     private final CommissionService commissionService;
 
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     public PaymentService(CommissionService commissionService) {
         this.commissionService = commissionService;
     }
-
 
     public void processPayment(PaymentRequest request) {
         User user = userRepository.findById(request.getUserId())
@@ -61,32 +65,37 @@ public class PaymentService {
         user.setBalance(user.getBalance().subtract(totalAmount));
         userRepository.save(user);
 
-
-        Payment payment;
-        switch (request.getPaymentMethod()) {
-            case CREDIT_CARD:
-                payment = creditCardProcessor.processPayment(request, totalAmount);
-                break;
-            case PAYPAL:
-                payment = payPalProcessor.processPayment(request, totalAmount);
-                break;
-            case STRIPE:
-                payment = stripeProcessor.processPayment(request, totalAmount);
-                break;
-            case BANK_TRANSFER:
-                payment = bankTransferProcessor.processPayment(request, totalAmount);
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported payment method: " + request.getPaymentMethod());
-        }
-
-        payment.setStatus(PaymentStatus.COMPLETED);
-
         BigDecimal totalCommission = totalAmount.multiply(new BigDecimal("0.10"));
         BigDecimal totalOwnerAmount = BigDecimal.ZERO;
+
+        boolean firstDelivery = true;
+
         for (Rental rental : confirmedRentals) {
             rental.setStatus(RentalStatus.DELIVERED);
+
+            Payment payment = new Payment();
             payment.setRental(rental);
+            payment.setAmount(rental.getTotalPrice());
+            payment.setPaymentMethod(request.getPaymentMethod());
+
+            switch (request.getPaymentMethod()) {
+                case CREDIT_CARD:
+                    creditCardProcessor.processPayment(request, rental.getTotalPrice());
+                    break;
+                case PAYPAL:
+                    payPalProcessor.processPayment(request, rental.getTotalPrice());
+                    break;
+                case STRIPE:
+                    stripeProcessor.processPayment(request, rental.getTotalPrice());
+                    break;
+                case BANK_TRANSFER:
+                    bankTransferProcessor.processPayment(request, rental.getTotalPrice());
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported payment method: " + request.getPaymentMethod());
+            }
+
+            payment.setStatus(PaymentStatus.COMPLETED);
             paymentRepository.save(payment);
 
             BigDecimal rentalAmount = rental.getTotalPrice();
@@ -96,6 +105,7 @@ public class PaymentService {
             User itemOwner = rental.getItem().getUser();
             itemOwner.setBalance(itemOwner.getBalance().add(itemOwnerCommission));
             userRepository.save(itemOwner);
+
         }
 
         List<User> adminUsers = userRepository.findByRole(Role.ADMIN);
@@ -109,6 +119,5 @@ public class PaymentService {
             commissionService.calculateAndSaveCommission(rental, rental.getTotalPrice().multiply(new BigDecimal("0.10")));
         }
     }
-
 
 }

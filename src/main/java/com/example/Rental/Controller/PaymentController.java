@@ -14,6 +14,7 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
+
     @PostMapping("/process")
     public ResponseEntity<?> processPayment(@RequestBody PaymentRequest paymentRequest) {
         try {
@@ -23,5 +24,7 @@ public class PaymentController {
             return ResponseEntity.status(500).body("Error processing payment: " + e.getMessage());
         }
     }
+
+
 }
 
