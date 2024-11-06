@@ -25,12 +25,11 @@ public class NotificationServiceImpl implements NotificationService {
 
         return notificationRepository.findAllByOwner(owner);
     }
-    // الدالة الأساسية المتوافقة مع التوقيع القديم
     public void sendNotification(User owner, String subject, String messageContent, Rental rental, Item item) {
-        sendNotification(owner, subject, messageContent, rental, item, null); // تمرير null للبريد الإلكتروني
+        sendNotification(owner, subject, messageContent, rental, item, null);
     }
 
-    // الدالة المعدلة التي تأخذ البريد الإلكتروني كمعامل اختياري
+
     public void sendNotification(User owner, String subject, String messageContent, Rental rental, Item item, String email) {
         Notification notification = new Notification();
         notification.setOwner(owner);
@@ -42,12 +41,12 @@ public class NotificationServiceImpl implements NotificationService {
 
         notificationRepository.save(notification);
 
-        // إرسال البريد الإلكتروني إذا تم تمريره
+
         String recipientEmail = email != null ? email : owner.getEmail();
         sendEmailNotification(recipientEmail, subject, messageContent);
     }
 
-    // دالة إرسال البريد الإلكتروني
+
     private void sendEmailNotification(String to, String subject, String content) {
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(to);
