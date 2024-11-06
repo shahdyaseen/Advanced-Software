@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 import java.util.Optional;
 
@@ -19,6 +22,8 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public UserService userService;
@@ -120,5 +125,29 @@ public class UserController {
     }
 
 
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+            Optional<User> optionalUser = userRepository.findById(id);
+            if (optionalUser.isPresent()) {
+                userRepository.deleteById(id);
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }
+    @PostMapping("/{userId}/deposit")
+    public ResponseEntity<?> deposit(@PathVariable Long userId, @RequestBody Map<String, BigDecimal> request) {
+        BigDecimal amount = request.get("amount");
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            return ResponseEntity.badRequest().body("Invalid deposit amount.");
+        }
 
-}
+        UserService.deposit(userId, amount);
+        return ResponseEntity.ok("Deposit successful. Your new balance has been updated.");
+    }
+    @GetMapping("/{userId}/balance")
+    public ResponseEntity<BigDecimal> getBalance(@PathVariable Long userId) {
+        User user = userService.getUserByUserId(userId);
+        return ResponseEntity.ok(user.getBalance());
+    }
+

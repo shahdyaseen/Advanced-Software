@@ -3,9 +3,21 @@ package com.example.Rental.models.Entity;
 import com.example.Rental.models.Enumes.PaymentMethod;
 import com.example.Rental.models.Enumes.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Data
+@Builder
+
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "payments")
 public class Payment {
     @Id
@@ -21,7 +33,7 @@ public class Payment {
     private PaymentMethod paymentMethod;
 
     @Column(name = "amount", nullable = false)
-    private Double amount;
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

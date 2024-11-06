@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Item entity representing an item available for rent in the rental system.
@@ -35,6 +37,7 @@ public class Item {
 
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false)
     private Integer quantity;
 
@@ -44,13 +47,15 @@ public class Item {
     @Column(name = "price_per_day", nullable = false)
     private BigDecimal pricePerDay;
 
-    private Boolean availability = true;
 
     @Column(name = "image_url")
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
-    private AvailabilityStatus itemStatus;
+    @Column(name = "availability_status", nullable = false, columnDefinition = "ENUM('AVAILABLE', 'UNAVAILABLE', 'RESERVED') DEFAULT 'AVAILABLE'")
+    private AvailabilityStatus availabilityStatus = AvailabilityStatus.AVAILABLE;
+
+
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -58,15 +63,27 @@ public class Item {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "availability_status", nullable = false)
-    private AvailabilityStatus availabilityStatus = AvailabilityStatus.AVAILABLE;
+
+
+    public boolean isAvailable() {
+        return availabilityStatus == AvailabilityStatus.AVAILABLE;
+    }
+
+
+    private double averageRating;
+    @Column(
+            name = "review_count",
+            nullable = false
+    )
+    private int reviewCount;
 
     public Item(Long itemId) {
+        this.averageRating = 0.0;
+        this.reviewCount = 0;
         this.id = itemId;
     }
-    public boolean isAvailable() {
-        return availability != null && availability;
-    }
+
 
 }
+
+

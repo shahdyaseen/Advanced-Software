@@ -24,4 +24,4 @@ public class NotificationController {
         return notificationService.getNotificationsByOwner(user);
     }
 
-}
+    }

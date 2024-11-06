@@ -51,4 +51,8 @@ public class ShoppingCart {
 
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
+
 }
+
+
+
