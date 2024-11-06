@@ -15,4 +15,5 @@ public class PaymentRequest {
     private String securityCode;
     private String stripeToken;
 
+    private BigDecimal deliveryFee;
 }

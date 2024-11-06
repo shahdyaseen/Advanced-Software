@@ -7,10 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,10 +28,10 @@ public class User {
     @Column(name = "UserId")
     private Long userId;
 
-    @NotBlank
-    @JsonView(Views.Public.class)
-    @Column(name = "UserName")
-    private String username;
+//    @NotBlank
+//    @JsonView(Views.Public.class)
+//    @Column(name = "UserName")
+//    private String username;
 
     @NotBlank
     @Size(min = 8, message = "Password must be at least 8 characters long")
@@ -46,9 +43,10 @@ public class User {
     @Email(message = "Invalid email format")
     @NotBlank
     @JsonView(Views.Public.class)
-    @Column(name = "Email")
+    @Column(name = "Email", unique = true)
     private String email;
 
+    @Getter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -76,4 +74,5 @@ public class User {
     public User(Long userId) {
         this.userId = userId;
     }
+
 }

@@ -3,12 +3,15 @@ package com.example.Rental.Services.UserServices;
 import com.example.Rental.DTO.PaymentRequest;
 import com.example.Rental.Services.CommissionService;
 import com.example.Rental.Services.PaymentProcessors.*;
+import com.example.Rental.models.Entity.Delivery;
 import com.example.Rental.models.Entity.Payment;
 import com.example.Rental.models.Entity.Rental;
 import com.example.Rental.models.Entity.User;
+import com.example.Rental.models.Enumes.DeliveryStatus;
 import com.example.Rental.models.Enumes.PaymentStatus;
 import com.example.Rental.models.Enumes.RentalStatus;
 import com.example.Rental.models.Enumes.Role;
+import com.example.Rental.repositories.DeliveryRepository;
 import com.example.Rental.repositories.PaymentRepository;
 import com.example.Rental.repositories.RentalRepository;
 import com.example.Rental.repositories.UserRepository;
@@ -30,6 +33,10 @@ public class PaymentService {
     private RentalRepository rentalRepository;
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private DeliveryRepository deliveryRepository;
+
     @Autowired
     private CreditCardPaymentProcessor creditCardProcessor;
     @Autowired
@@ -56,7 +63,8 @@ public class PaymentService {
 
         BigDecimal totalAmount = confirmedRentals.stream()
                 .map(Rental::getTotalPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .add(request.getDeliveryFee());
 
         if (user.getBalance().compareTo(totalAmount) < 0) {
             throw new RuntimeException("Insufficient funds for payment.");
@@ -77,6 +85,8 @@ public class PaymentService {
             payment.setRental(rental);
             payment.setAmount(rental.getTotalPrice());
             payment.setPaymentMethod(request.getPaymentMethod());
+
+            payment.setDeliveryFee(request.getDeliveryFee().doubleValue());
 
             switch (request.getPaymentMethod()) {
                 case CREDIT_CARD:
@@ -106,6 +116,28 @@ public class PaymentService {
             itemOwner.setBalance(itemOwner.getBalance().add(itemOwnerCommission));
             userRepository.save(itemOwner);
 
+
+
+            Delivery delivery = new Delivery();
+            delivery.setRental(rental);
+            delivery.setDeliveryAddress(user.getContactInfo());
+            delivery.setDeliveryDate(LocalDate.now().plusDays(3));
+            delivery.setDeliveryStatus(DeliveryStatus.SHIPPED);
+            delivery.setEstimatedDeliveryTime(LocalDateTime.now().plusDays(3));
+
+
+            if (firstDelivery) {
+                delivery.setDeliveryFee(request.getDeliveryFee());
+                firstDelivery = false;
+            } else {
+                delivery.setDeliveryFee(BigDecimal.ZERO);
+            }
+
+            deliveryRepository.save(delivery);
+
+
+            String message = "Your rental item has been shipped and will arrive on " + delivery.getEstimatedDeliveryTime();
+            notificationService.sendNotification(user, "Delivery Status Update", message, rental, rental.getItem());
         }
 
         List<User> adminUsers = userRepository.findByRole(Role.ADMIN);
@@ -119,5 +151,6 @@ public class PaymentService {
             commissionService.calculateAndSaveCommission(rental, rental.getTotalPrice().multiply(new BigDecimal("0.10")));
         }
     }
+
 
 }
