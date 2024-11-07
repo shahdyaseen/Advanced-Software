@@ -36,12 +36,9 @@ public class PaymentService {
     private RentalRepository rentalRepository;
     @Autowired
     private PaymentRepository paymentRepository;
-<<<<<<< HEAD
     @Autowired
     private DeliveryRepository deliveryRepository;
 
-=======
->>>>>>> 7640219 (Implement functionality to retrieve items by tag)
     @Autowired
     private CreditCardPaymentProcessor creditCardProcessor;
     @Autowired
@@ -91,11 +88,8 @@ public class PaymentService {
             payment.setAmount(rental.getTotalPrice());
             payment.setPaymentMethod(request.getPaymentMethod());
 
-<<<<<<< HEAD
             payment.setDeliveryFee(request.getDeliveryFee().doubleValue());
 
-=======
->>>>>>> 7640219 (Implement functionality to retrieve items by tag)
             switch (request.getPaymentMethod()) {
                 case CREDIT_CARD:
                     creditCardProcessor.processPayment(request, rental.getTotalPrice());
@@ -124,7 +118,6 @@ public class PaymentService {
             itemOwner.setBalance(itemOwner.getBalance().add(itemOwnerCommission));
             userRepository.save(itemOwner);
 
-<<<<<<< HEAD
 
 
             Delivery delivery = new Delivery();
@@ -148,8 +141,7 @@ public class PaymentService {
             String message = "Your rental item has been shipped and will arrive on " + delivery.getEstimatedDeliveryTime();
             notificationService.sendNotification(user, "Delivery Status Update", message, rental, rental.getItem());
 
-=======
->>>>>>> 7640219 (Implement functionality to retrieve items by tag)
+
         }
 
         List<User> adminUsers = userRepository.findByRole(Role.ADMIN);
@@ -166,7 +158,6 @@ public class PaymentService {
 
     }
 
-<<<<<<< HEAD
     public String getPaymentStatus(String transactionId) {
         return paymentRepository.findByTransactionId(transactionId)
                 .map(Payment::getStatus)
@@ -198,6 +189,4 @@ public class PaymentService {
     }
 
 }
-=======
-}
->>>>>>> 7640219 (Implement functionality to retrieve items by tag)
+
