@@ -32,7 +32,7 @@ public class ItemController {
         return itemService.getAllItems();
     }
 
-    //  search functionality
+
     @GetMapping("/search")
     public ResponseEntity<List<Item>> searchItems(@RequestParam String title, @RequestHeader("userId") Long userId) {
         List<Item> items = itemService.searchItemsByTitle(title);
