@@ -18,7 +18,6 @@ public class InsuranceClaimController {
     @Autowired
     private InsuranceClaimService claimService;
 
-    //الشخض الذي اخذ المنتج لفترة محدودة و خربه
     @PostMapping("/USER/createClaim")
     public ResponseEntity<InsuranceClaim> createClaim(@RequestBody InsuranceClaim claim) {
         System.out.println("the clim in controller here : "+claimService.createClaim(claim));

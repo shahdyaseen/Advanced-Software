@@ -2,6 +2,7 @@ package com.example.Rental.Services.UserServices;
 
 import com.example.Rental.DTO.PaymentRequest;
 import com.example.Rental.Services.CommissionService;
+import com.example.Rental.Services.InvoiceService;
 import com.example.Rental.Services.PaymentProcessors.*;
 import com.example.Rental.models.Entity.Delivery;
 import com.example.Rental.models.Entity.Payment;
@@ -29,6 +30,8 @@ public class PaymentService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private InvoiceService invoiceService;
     @Autowired
     private RentalRepository rentalRepository;
     @Autowired
@@ -150,7 +153,16 @@ public class PaymentService {
         for (Rental rental : confirmedRentals) {
             commissionService.calculateAndSaveCommission(rental, rental.getTotalPrice().multiply(new BigDecimal("0.10")));
         }
+
+
     }
 
+    public String getPaymentStatus(String transactionId) {
+        Payment payment = paymentRepository.findByTransactionId(transactionId)
+                .orElseThrow(() -> new RuntimeException("Payment not found"));
+
+        PaymentStatus status = payment.getStatus();
+        return status.name();
+    }
 
 }

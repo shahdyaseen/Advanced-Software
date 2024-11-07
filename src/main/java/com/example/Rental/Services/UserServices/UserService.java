@@ -22,9 +22,7 @@ public class UserService {
 
 
     private static UserRepository userRepository;
-    @Autowired
 
-    private UserRepository userRepository;
     @Autowired
     private EmailService emailService;
     @Autowired
