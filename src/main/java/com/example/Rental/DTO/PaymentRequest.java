@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Data
 public class PaymentRequest {
     private Long userId;
+    private Long rentalId;
 
     private Long RentalId;
     private PaymentMethod paymentMethod;
@@ -16,4 +17,5 @@ public class PaymentRequest {
     private String securityCode;
     private String stripeToken;
     private BigDecimal deliveryFee;
+
 }

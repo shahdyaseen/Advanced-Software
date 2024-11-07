@@ -3,13 +3,21 @@ package com.example.Rental.Controller;
 
 import com.example.Rental.DTO.PaymentRequest;
 import com.example.Rental.Services.UserServices.PaymentService;
-import jakarta.transaction.Transactional;
+
+import com.example.Rental.models.Entity.Payment;
+import com.example.Rental.models.Entity.Rental;
+import com.example.Rental.models.Entity.User;
+import com.example.Rental.models.Enumes.PaymentStatus;
+import com.example.Rental.repositories.PaymentRepository;
+import com.example.Rental.repositories.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
@@ -18,8 +26,7 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @Transactional
-    @PreAuthorize("hasRole('ROLE_USER')")
+
     @PostMapping("/process")
     public ResponseEntity<?> processPayment(@RequestBody PaymentRequest paymentRequest) {
         try {
@@ -40,6 +47,19 @@ public class PaymentController {
         }
     }
 
+            @PostMapping("/partial")
+            public ResponseEntity<?> processPartialPayment (@RequestBody PaymentRequest paymentRequest){
+                try {
+                    paymentService.processPartialPayment(paymentRequest, new BigDecimal("50.00"));
+                    return ResponseEntity.ok("Partial payment processed successfully.");
+                } catch (Exception e) {
+                    return ResponseEntity.status(500).body("Error processing partial payment: " + e.getMessage());
+                }
+            }
+        }
 
-}
+
+
+
+
 
