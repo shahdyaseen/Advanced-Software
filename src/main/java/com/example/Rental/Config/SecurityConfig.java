@@ -5,6 +5,7 @@ import com.example.Rental.Services.UserServices.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,7 +23,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/payments/partial").permitAll()// مسار غير محمي
-//                        .requestMatchers("/**").permitAll() // مسارات أخرى غير محمية
+                       .requestMatchers("/**").permitAll() // مسارات أخرى غير محمية
                         .anyRequest().authenticated() // جميع المسارات الأخرى تحتاج مصادقة
                 )
                 .oauth2Login(oauth -> oauth

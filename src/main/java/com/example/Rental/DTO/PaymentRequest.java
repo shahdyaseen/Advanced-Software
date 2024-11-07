@@ -16,9 +16,7 @@ public class PaymentRequest {
     private String expiryDate;
     private String securityCode;
     private String stripeToken;
-<<<<<<< HEAD
     private BigDecimal deliveryFee;
-=======
->>>>>>> 7640219 (Implement functionality to retrieve items by tag)
+
 
 }
