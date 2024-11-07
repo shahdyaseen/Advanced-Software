@@ -2,6 +2,7 @@ package com.example.Rental.Services;
 
 import com.example.Rental.models.Entity.Item;
 import com.example.Rental.repositories.ItemRepository;
+import com.example.Rental.repositories.RecommendationRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,12 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final RecommendationRepository recommendationsRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository ) {
-
+    public ItemServiceImpl(ItemRepository itemRepository, RecommendationRepository recommendationsRepository) {
         this.itemRepository = itemRepository;
+        this.recommendationsRepository = recommendationsRepository;
     }
 
     @Override
@@ -42,7 +44,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void deleteItem(Long id) {
+        // Delete related recommendations first
+        recommendationsRepository.deleteByItemId(id);
         itemRepository.deleteById(id);
     }
 
@@ -72,8 +77,6 @@ public class ItemServiceImpl implements ItemService {
         }).orElseThrow(() -> new IllegalArgumentException("Item not found with id: " + id));
     }
 
-
-
     public List<Item> searchItemsByTitle(String title) {
         List<Item> results = new ArrayList<>();
         String[] keywords = title.split(" "); // Split the input by space
@@ -94,7 +97,6 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItemsByCategory(Long categoryId) {
         itemRepository.deleteByCategoryId(categoryId);
     }
-
 
     @Override
     public List<Item> getItemsByCategory(Long categoryId) {
@@ -132,8 +134,4 @@ public class ItemServiceImpl implements ItemService {
                 .filter(item -> item.getAverageRating() >= rating)
                 .collect(Collectors.toList());
     }
-
-
-
-
 }
