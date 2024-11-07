@@ -25,11 +25,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    public UserService userService;
 
-    public UserController(UserService userService){
-        this.userService=userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
 
     }
 
@@ -59,39 +57,25 @@ public class UserController {
     @PostMapping("/admin/addProfile")
     public ResponseEntity<String> addUserProfile(@RequestBody User addedUser) {
         User user = userService.addUser(addedUser);
-        if(user == null){
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("email already exists ");
-        }
-        else {
+        } else {
             return ResponseEntity.status(HttpStatus.CREATED).body("user added successfully");
         }
     }
 
 
-
     @Transactional
     @PreAuthorize("hasRole('ROLE_USER')")
     @PutMapping("/user/updateProfile/{email}")
-    public ResponseEntity<User> updateUserProfileFormUser(@PathVariable String email ,@RequestBody User updatedUser) {
-        User user = userService.updateUserFormUser(email,updatedUser);
-        if(user == null){
+    public ResponseEntity<User> updateUserProfileFormUser(@PathVariable String email, @RequestBody User updatedUser) {
+        User user = userService.updateUserFormUser(email, updatedUser);
+        if (user == null) {
             return ResponseEntity.status(403).body(null);
         }
 
         return ResponseEntity.ok(user);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @GetMapping("/{id}")
@@ -100,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity createUser(@RequestBody User user){
+    public ResponseEntity createUser(@RequestBody User user) {
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }
@@ -110,7 +94,7 @@ public class UserController {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
-        //  existingUser.setUsername(userDetails.getUsername());
+            //  existingUser.setUsername(userDetails.getUsername());
             existingUser.setPassword(userDetails.getPassword());
             existingUser.setEmail(userDetails.getEmail());
             existingUser.setRole(userDetails.getRole());
@@ -125,16 +109,8 @@ public class UserController {
     }
 
 
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-            Optional<User> optionalUser = userRepository.findById(id);
-            if (optionalUser.isPresent()) {
-                userRepository.deleteById(id);
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        }
+
+
     @PostMapping("/{userId}/deposit")
     public ResponseEntity<?> deposit(@PathVariable Long userId, @RequestBody Map<String, BigDecimal> request) {
         BigDecimal amount = request.get("amount");
@@ -145,9 +121,12 @@ public class UserController {
         UserService.deposit(userId, amount);
         return ResponseEntity.ok("Deposit successful. Your new balance has been updated.");
     }
+
     @GetMapping("/{userId}/balance")
     public ResponseEntity<BigDecimal> getBalance(@PathVariable Long userId) {
         User user = userService.getUserByUserId(userId);
         return ResponseEntity.ok(user.getBalance());
     }
+
+}
 

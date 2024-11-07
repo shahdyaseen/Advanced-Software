@@ -21,27 +21,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/auth/login", "/api/auth/register", "/auth/verifyPhone","/api/admin/deleteUser/{userId}","/api/admin/updateProfile/{id}","/api/admin/addProfile","/api/user/updateProfile/{email}"
-//                        ,"/api/claims/ADMIN/getAllClaims","/api/claims/USER/createClaim"
-//                        ,"/api/claims/USER/{id}/updateDescription","/api/claims/COMPANY/{id}/REJECTED"
-//                        ,"/api/claims/USER/{id}","/api/claims/ADMIN/status"
-//                        ,"/api/claims/ADMIN/getAllClaims","/api/claims/COMPANY/totalClaimedAmount"
-//                        ,"/api/claims/COMPANY/{id}/status"
-//
-//                        ,"/api/policies/USER/createPolicy"
-//                        ,"/api/policies/ADMIN/getAllPolicies"
-//                        ,"/api/policies/ADMIN/getPolicyById/{id}"
-//                        ,"/api/policies/COMPANY/{id}/status"
-//                        ,"/api/policies/COMPANY/deletePolicy/{id}"
-//                        ,"/api/policies/USER/{id}/updateDetails"
-//                        ,"/api/policies/ADMIN/findByStatus"
-//                        ,"/api/policies/COMPANY/findByStatus"
-//                        ,"/api/policies/COMPANY/{id}/updateCoverageAmount"
-//                        ,"/api/policies/user/{userId}/policies").permitAll()
-//                        .anyRequest().authenticated()
-                                .requestMatchers("/**"
-                                       ).permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/payments/partial").permitAll()// مسار غير محمي
+//                        .requestMatchers("/**").permitAll() // مسارات أخرى غير محمية
+                        .anyRequest().authenticated() // جميع المسارات الأخرى تحتاج مصادقة
                 )
                 .oauth2Login(oauth -> oauth
                         .userInfoEndpoint(userInfo -> userInfo
@@ -52,6 +34,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
 
