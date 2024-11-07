@@ -135,4 +135,11 @@ public class CommissionService {
         }
         return commissions;
     }
+    public Commission calculateAndSaveCommission(Rental rental, BigDecimal commissionAmount) {
+        Commission commission = new Commission();
+        commission.setRental(rental);
+        commission.setAmount(commissionAmount);
+
+        return commissionRepository.save(commission);
+    }
 }

@@ -51,11 +51,7 @@ public class Rental {
     private LocalDateTime updatedAt = LocalDateTime.now();
     @Column(name = "Note")
     private String note = String.valueOf(LocalDateTime.now());
-    @Column(name = "initial_payment_amount")
-    private BigDecimal initialPaymentAmount = BigDecimal.ZERO;
 
-    @Column(name = "remaining_payment_amount")
-    private BigDecimal remainingPaymentAmount = BigDecimal.ZERO;
 
 
 }

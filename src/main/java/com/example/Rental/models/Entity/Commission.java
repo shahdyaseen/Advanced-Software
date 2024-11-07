@@ -26,7 +26,7 @@ public class Commission {
     private Rental rental;
 
     @Column(name = "percentage", nullable = false)
-    private BigDecimal percentage = new BigDecimal("10.00"); // 10%
+    private BigDecimal percentage = new BigDecimal("10.00");
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;

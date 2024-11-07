@@ -67,19 +67,6 @@ public class RentalService {
     }
 
 
-//    public void confirmRental(Rental rental, PaymentMethod paymentMethod) {
-//        rental.setStatus(RentalStatus.CONFIRMED);
-//       // paymentService.processInitialPayment(rental, paymentMethod);
-//        rentalRepository.save(rental);
-//       // Calculate and save commission upon confirmation
-//        commissionService.calculateAndSaveCommission(rental);
-//    }
-//
-//    public void deliverRental(Rental rental, PaymentMethod paymentMethod) {
-//        rental.setStatus(RentalStatus.DELIVERED);
-//        paymentService.processFinalPayment(rental, paymentMethod);
-//        rentalRepository.save(rental);
-//    }
 
 }
 

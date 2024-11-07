@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/items")
@@ -32,7 +30,7 @@ public class ItemController {
         return itemService.getAllItems();
     }
 
-    //  search functionality
+
     @GetMapping("/search")
     public ResponseEntity<List<Item>> searchItems(@RequestParam String title, @RequestHeader("userId") Long userId) {
         List<Item> items = itemService.searchItemsByTitle(title);
