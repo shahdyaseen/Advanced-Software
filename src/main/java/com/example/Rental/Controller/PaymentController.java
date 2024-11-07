@@ -37,7 +37,6 @@ public class PaymentController {
         }
     }
 
-<<<<<<< HEAD
     @GetMapping("/status/{transactionId}")
     public ResponseEntity<?> getPaymentStatus(@PathVariable String transactionId) {
         try {
@@ -63,8 +62,6 @@ public class PaymentController {
 
 
 
-=======
 
-}
->>>>>>> 7640219 (Implement functionality to retrieve items by tag)
+
 
