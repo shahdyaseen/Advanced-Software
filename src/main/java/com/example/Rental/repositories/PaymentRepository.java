@@ -13,14 +13,20 @@ import java.util.Optional;
 import java.math.BigDecimal;
 import java.util.List;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Repository
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
+<<<<<<< HEAD
     List<Payment> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
     Optional<Payment> findByTransactionId(String transactionId);
     List<Payment> findByRentalId(Long rentalId);
 
 
 
+=======
+>>>>>>> 7640219 (Implement functionality to retrieve items by tag)
 }
 
