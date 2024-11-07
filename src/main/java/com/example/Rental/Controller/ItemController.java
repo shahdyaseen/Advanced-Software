@@ -1,5 +1,6 @@
 package com.example.Rental.Controller;
 
+import com.example.Rental.Services.ItemServiceImpl;
 import com.example.Rental.models.Entity.Item;
 import com.example.Rental.Services.ItemService;
 import org.jetbrains.annotations.NotNull;
@@ -9,16 +10,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/items")
 public class ItemController {
 
     private final ItemService itemService;
+    private final ItemServiceImpl itemServiceI;
+
 
     @Autowired
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, ItemServiceImpl itemServiceI) {
         this.itemService = itemService;
+        this.itemServiceI = itemServiceI;
     }
 
     @GetMapping
@@ -69,5 +74,18 @@ public class ItemController {
     }
 
 
-
+    @PostMapping("/{itemId}/tags")
+    public ResponseEntity<Item> addTagsToItem(@PathVariable Long itemId, @RequestBody Set<String> tagNames) {
+        Item updatedItem = itemServiceI.addTagsToItem(itemId, tagNames);
+        return ResponseEntity.ok(updatedItem);
+    }
+    @GetMapping("/tags/{tagName}")
+    public ResponseEntity<List<Item>> getItemsByTag(@PathVariable String tagName) {
+        List<Item> items = itemServiceI.getItemsByTag(tagName);
+        if (items.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+        return ResponseEntity.ok(items);
+    }
 }

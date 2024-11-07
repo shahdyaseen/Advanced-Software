@@ -1,6 +1,7 @@
 package com.example.Rental.models.Entity;
 
 import com.example.Rental.models.Enumes.AvailabilityStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,6 +77,14 @@ public class Item {
             nullable = false
     )
     private int reviewCount;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "item_tags",
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    @JsonManagedReference
+    private Set<Tag> tags = new HashSet<>();
 
     public Item(Long itemId) {
         this.averageRating = 0.0;

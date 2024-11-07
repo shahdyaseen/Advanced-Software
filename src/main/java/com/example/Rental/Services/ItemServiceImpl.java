@@ -1,23 +1,28 @@
 package com.example.Rental.Services;
 
 import com.example.Rental.models.Entity.Item;
+import com.example.Rental.models.Entity.Tag;
 import com.example.Rental.repositories.ItemRepository;
+import com.example.Rental.repositories.TagRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository ) {
+    public ItemServiceImpl(ItemRepository itemRepository, TagRepository tagRepository) {
 
         this.itemRepository = itemRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -90,7 +95,28 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
+    @Transactional
+    public Item addTagsToItem(Long itemId, Set<String> tagNames) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("Item not found"));
 
+        Set<Tag> tags = item.getTags();
 
+        // Add tags
+        for (String tagName : tagNames) {
+            Tag tag = tagRepository.findByName(tagName)
+                    .orElseGet(() -> tagRepository.save(new Tag(tagName)));
+            tags.add(tag);
+        }
 
+        item.setTags(tags);
+        return itemRepository.save(item);
+    }
+
+    public List<Item> getItemsByTag(String tagName) {
+        Tag tag = tagRepository.findByName(tagName)
+                .orElseThrow(() -> new IllegalArgumentException("Tag not found"));
+
+        return itemRepository.findByTags(tag);
+    }
 }
