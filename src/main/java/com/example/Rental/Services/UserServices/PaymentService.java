@@ -36,7 +36,6 @@ public class PaymentService {
     private RentalRepository rentalRepository;
     @Autowired
     private PaymentRepository paymentRepository;
-
     @Autowired
     private DeliveryRepository deliveryRepository;
 
@@ -141,6 +140,7 @@ public class PaymentService {
 
             String message = "Your rental item has been shipped and will arrive on " + delivery.getEstimatedDeliveryTime();
             notificationService.sendNotification(user, "Delivery Status Update", message, rental, rental.getItem());
+
         }
 
         List<User> adminUsers = userRepository.findByRole(Role.ADMIN);
@@ -158,11 +158,33 @@ public class PaymentService {
     }
 
     public String getPaymentStatus(String transactionId) {
-        Payment payment = paymentRepository.findByTransactionId(transactionId)
-                .orElseThrow(() -> new RuntimeException("Payment not found"));
+        return paymentRepository.findByTransactionId(transactionId)
+                .map(Payment::getStatus)
+                .orElseThrow(() -> new RuntimeException("Payment not found"))
+                .name();
+    }
+    public void processPartialPayment(PaymentRequest request, BigDecimal partialAmount) {
+        Rental rental = rentalRepository.findById(request.getRentalId())
+                .orElseThrow(() -> new RuntimeException("Rental not found for the given ID"));
 
-        PaymentStatus status = payment.getStatus();
-        return status.name();
+        User user = rental.getRenter();
+
+        List<Payment> payments = paymentRepository.findByRentalId(rental.getId());
+        if (payments.isEmpty()) {
+            throw new RuntimeException("Payment not found for rental ID");
+        }
+
+        Payment payment = payments.get(0);
+
+        payment.addPartialPayment(partialAmount);
+
+        if (payment.getPaidAmount().compareTo(payment.getAmount()) >= 0) {
+            payment.setStatus(PaymentStatus.COMPLETED);
+        } else {
+            payment.setStatus(PaymentStatus.PARTIALLY_PAID);
+        }
+
+        paymentRepository.save(payment);
     }
 
 }
