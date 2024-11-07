@@ -2,6 +2,7 @@ package com.example.Rental.Services.UserServices;
 
 import com.example.Rental.DTO.PaymentRequest;
 import com.example.Rental.Services.CommissionService;
+import com.example.Rental.Services.InvoiceService;
 import com.example.Rental.Services.PaymentProcessors.*;
 import com.example.Rental.models.Entity.Delivery;
 import com.example.Rental.models.Entity.Payment;
@@ -29,6 +30,8 @@ public class PaymentService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private InvoiceService invoiceService;
     @Autowired
     private RentalRepository rentalRepository;
     @Autowired
@@ -84,6 +87,7 @@ public class PaymentService {
             payment.setRental(rental);
             payment.setAmount(rental.getTotalPrice());
             payment.setPaymentMethod(request.getPaymentMethod());
+
             payment.setDeliveryFee(request.getDeliveryFee().doubleValue());
 
             switch (request.getPaymentMethod()) {
@@ -115,6 +119,8 @@ public class PaymentService {
             userRepository.save(itemOwner);
 
 
+
+
             Delivery delivery = new Delivery();
             delivery.setRental(rental);
             delivery.setDeliveryAddress(user.getContactInfo());
@@ -135,6 +141,9 @@ public class PaymentService {
 
             String message = "Your rental item has been shipped and will arrive on " + delivery.getEstimatedDeliveryTime();
             notificationService.sendNotification(user, "Delivery Status Update", message, rental, rental.getItem());
+
+
+
         }
 
         List<User> adminUsers = userRepository.findByRole(Role.ADMIN);
@@ -147,6 +156,40 @@ public class PaymentService {
         for (Rental rental : confirmedRentals) {
             commissionService.calculateAndSaveCommission(rental);
         }
+
+
+    }
+
+
+    public String getPaymentStatus(String transactionId) {
+        return paymentRepository.findByTransactionId(transactionId)
+                .map(Payment::getStatus)
+                .orElseThrow(() -> new RuntimeException("Payment not found"))
+                .name();
+    }
+    public void processPartialPayment(PaymentRequest request, BigDecimal partialAmount) {
+        Rental rental = rentalRepository.findById(request.getRentalId())
+                .orElseThrow(() -> new RuntimeException("Rental not found for the given ID"));
+
+        User user = rental.getRenter();
+
+        List<Payment> payments = paymentRepository.findByRentalId(rental.getId());
+        if (payments.isEmpty()) {
+            throw new RuntimeException("Payment not found for rental ID");
+        }
+
+        Payment payment = payments.get(0);
+
+        payment.addPartialPayment(partialAmount);
+
+        if (payment.getPaidAmount().compareTo(payment.getAmount()) >= 0) {
+            payment.setStatus(PaymentStatus.COMPLETED);
+        } else {
+            payment.setStatus(PaymentStatus.PARTIALLY_PAID);
+        }
+
+        paymentRepository.save(payment);
     }
 
 }
+

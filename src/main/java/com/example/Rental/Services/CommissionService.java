@@ -5,6 +5,7 @@ import com.example.Rental.Errors.DateRangeException;
 import com.example.Rental.models.Entity.Commission;
 import com.example.Rental.models.Entity.Rental;
 import com.example.Rental.repositories.CommissionRepository;
+import com.example.Rental.repositories.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,12 @@ import java.util.Optional;
 public class CommissionService {
 
     private final CommissionRepository commissionRepository;
+    private final RentalRepository rentalRepository;
 
     @Autowired
-    public CommissionService(CommissionRepository commissionRepository) {
+    public CommissionService(CommissionRepository commissionRepository ,RentalRepository rentalRepository) {
         this.commissionRepository = commissionRepository;
+        this.rentalRepository = rentalRepository;
     }
 
     // Method to calculate and save a commission for a rental
@@ -52,11 +55,19 @@ public class CommissionService {
     public Optional<Commission> updateCommission(Long id, Commission commissionDetails) {
         return commissionRepository.findById(id).map(commission -> {
             commission.setAmount(commissionDetails.getAmount());
-            commission.setRental(commissionDetails.getRental());
+
+            // Keep the existing rental if not provided in the update request
+            if (commissionDetails.getRental() != null) {
+                Rental rental = rentalRepository.findById(commissionDetails.getRental().getId())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid rental ID"));
+                commission.setRental(rental);
+            }
+
             commission.setUpdatedAt(LocalDateTime.now());
             return commissionRepository.save(commission);
         });
     }
+
 
     // Method to delete a commission
     public void deleteCommission(Long id) {

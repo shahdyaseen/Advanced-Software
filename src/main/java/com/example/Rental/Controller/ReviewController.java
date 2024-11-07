@@ -72,7 +72,7 @@ public class ReviewController {
         } else {
             List<Review> reviews = this.reviewRepository.findByRentalItemId(itemId);
             List<ReviewResponseDto> reviewResponseDtos = (List) reviews.stream().map((review) -> {
-                return new ReviewResponseDto(review.getRental().getId(), review.getRental().getRenter().getUsername(), review.getRating(), review.getComment(), review.getCreatedAt());
+                return new ReviewResponseDto(review.getRental().getId(), review.getRental().getRenter().getName(), review.getRating(), review.getComment(), review.getCreatedAt());
             }).collect(Collectors.toList());
             return ResponseEntity.ok(new ItemReviewsResponseDto(item.getTitle(), reviewResponseDtos));
         }

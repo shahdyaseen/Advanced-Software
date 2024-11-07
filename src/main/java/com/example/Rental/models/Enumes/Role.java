@@ -4,7 +4,6 @@ package com.example.Rental.models.Enumes;
 public enum Role {
     ADMIN,
     USER,
-    SUPPLIER,
     STORE_OWNER,
     BENEFICIARY;
 

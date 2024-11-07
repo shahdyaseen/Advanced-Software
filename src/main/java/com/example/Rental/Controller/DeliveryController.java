@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 @RestController
 @RequestMapping("deliveries")
 public class DeliveryController {
@@ -32,11 +33,14 @@ public class DeliveryController {
 
         return ResponseEntity.ok(response);
     }
+
+
     @GetMapping("/company-profits")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<BigDecimal> calculateDeliveryCompanyProfits() {
         List<Delivery> allDeliveries = deliveryRepository.findAll();
         BigDecimal totalProfits = allDeliveries.stream()
-                .map(Delivery::getDeliveryFee) // جمع رسوم التوصيل لكل طلبية
+                .map(Delivery::getDeliveryFee)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return ResponseEntity.ok(totalProfits);

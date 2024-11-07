@@ -50,6 +50,14 @@ public class Payment {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(name = "paid_amount", nullable = false)
+    private BigDecimal paidAmount = BigDecimal.ZERO;
+
+
+    public void addPartialPayment(BigDecimal amount) {
+        this.paidAmount = this.paidAmount.add(amount);
+    }
+
 
 }
 

@@ -3,15 +3,14 @@ package com.example.Rental.DTO;
 import java.util.List;
 
 public class ItemReviewsResponseDto {
-    private String itemTitle; // Title of the item
-    private List<ReviewResponseDto> reviews; // List of reviews
+    private String itemTitle;
+    private List<ReviewResponseDto> reviews;
 
     public ItemReviewsResponseDto(String itemTitle, List<ReviewResponseDto> reviews) {
         this.itemTitle = itemTitle;
         this.reviews = reviews;
     }
 
-    // Getters and Setters
     public String getItemTitle() {
         return itemTitle;
     }

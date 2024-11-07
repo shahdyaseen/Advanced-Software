@@ -1,11 +1,14 @@
 package com.example.Rental.Controller;
 
+import com.example.Rental.DTO.PaymentRequest;
 import com.example.Rental.Errors.RentalNotFoundException;
+import com.example.Rental.Services.UserServices.PaymentService;
 import com.example.Rental.Services.UserServices.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @RestController
@@ -13,6 +16,10 @@ import java.util.Map;
 public class RentalController {
 
     private final RentalService rentalService;
+    @Autowired
+
+    PaymentService paymentService;
+
 
     @Autowired
     public RentalController(RentalService rentalService) {
@@ -40,4 +47,6 @@ public class RentalController {
         rentalService.rejectRental(rentalId, notes);
         return ResponseEntity.ok("Rental request rejected successfully.");
     }
+
+
 }
