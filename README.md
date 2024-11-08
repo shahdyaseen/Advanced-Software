@@ -9,7 +9,7 @@
   <h1>Peer-to-Peer Rental Platform for Everyday Items</h1> &nbsp;
 <div align="center">
   <p align="center">
-    <a href="DEMO LINK">👾 View Demo</a>
+    <a href="https://drive.google.com/drive/folders/1deZO6aF5LGN1ZyNQpeAcqBsgOhbOTN6-?usp=sharing">👾 View Demo</a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="REPORT LINK">🐞 Report Bug </a>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
