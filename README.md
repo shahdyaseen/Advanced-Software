@@ -154,7 +154,7 @@ Make sure you have Maven installed. Run the following command to install the nec
 
 <a name="API"></a>
 ## 📝 API Documentation
-Our API is fully documented and accessible through Postman, providing a detailed guide for all endpoints. You can view the latest documentation <a href="POSTMAN URLL"><strong>here</strong></a>  once the backend is live. This documentation provides a clear overview of each endpoint, with details on request parameters, response structures, and practical examples to guide integration.
+Our API is fully documented and accessible through Postman, providing a detailed guide for all endpoints. You can view the latest documentation <a href="https://rental-app-6121.postman.co/workspace/Rental~dcb06ec3-4aed-4505-91d5-e5c923b168d2/collection/39311362-637c5de3-149d-4b21-a1cd-f37e7494107f?action=share&creator=39290520"><strong>here</strong></a>  once the backend is live. This documentation provides a clear overview of each endpoint, with details on request parameters, response structures, and practical examples to guide integration.
 <br>
 <br>
 <br>
@@ -175,8 +175,8 @@ Get a firsthand look at our project in action! Watch the demo to explore its fea
 ## 📱 Contact
 * Razan Dwekat - razan2003.dw@gmail.com
 * Wafa'a Alshaikh Ibrahim - wafaj2017@gmail.com
-* Haneed Alhaj - haneen@gmail.com
-* Shahd Yaseen - shahd@gmail.com
+* Haneed Alhaj - haneenradad2013@gmail.com
+* Shahd Yaseen - shadthabit@gmail.com
 <br>
   <p align="center"><a href="https://github.com/shahdyaseen/Advanced-Software/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=shahdyaseen/Advanced-Software" />
