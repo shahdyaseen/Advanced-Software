@@ -154,7 +154,7 @@ Make sure you have Maven installed. Run the following command to install the nec
 
 <a name="API"></a>
 ## 📝 API Documentation
-Our API is fully documented and accessible through Postman, providing a detailed guide for all endpoints. You can view the latest documentation <a href="https://rental-app-6121.postman.co/workspace/Rental~dcb06ec3-4aed-4505-91d5-e5c923b168d2/documentation/39311362-637c5de3-149d-4b21-a1cd-f37e7494107f"><strong>here</strong></a>  once the backend is live. This documentation provides a clear overview of each endpoint, with details on request parameters, response structures, and practical examples to guide integration.
+Our API is fully documented and accessible through Postman, providing a detailed guide for all endpoints. You can view the latest documentation <a href="https://documenter.getpostman.com/view/39311362/2sAY519g8Z"><strong>here</strong></a>  once the backend is live. This documentation provides a clear overview of each endpoint, with details on request parameters, response structures, and practical examples to guide integration.
 <br>
 <br>
 <br>
